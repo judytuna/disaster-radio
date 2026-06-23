@@ -113,6 +113,9 @@ bool spiffsInitialized = false;
 bool displayInitialized = false;
 bool loraInitialized = false;
 
+void setup();   // we need these since we're main.cpp not main.ino
+void loop();    // we need these since we're main.cpp not main.ino
+
 void setupWiFi()
 {
   Serial.println("* Initializing WiFi...");
@@ -187,7 +190,7 @@ void setupSD()
 #ifdef SD_SCK
   Serial.println("* Initializing SD card...");
   sd_card.begin(SD_SCK, SD_MISO, SD_MOSI, -1);
-  if (SD.begin(13, sd_card))
+  if (SD.begin(13, sd_card)) // assuming SD card CS pin is 13, change if different
   {
     sdInitialized = true;
   }
@@ -216,6 +219,7 @@ bool checkFileIsReadable(FS &fs, const char *path)
   if (fs.exists(path))
   {
     return !!fs.open(path, "r");
+    Serial.println("fs.open worked");
   }
   return false;
 }
@@ -240,10 +244,12 @@ void setupHTTPSever()
   }
 
   http_server.onNotFound([](AsyncWebServerRequest *request) {
+    Serial.println(" --> send(404) called");
     request->send(404);
   });
 
   http_server.onRequestBody([](AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total) {
+    Serial.println(" --> onRequestBody called");
   });
 
   http_server.begin();
