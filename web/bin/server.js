@@ -117,6 +117,7 @@ function sendACK(ws, msg) {
 
 wsServer.on('connection', function(ws, req) {
 
+  ws._curID = 0;
   var curID = 0;
 
   // send fake chat messages every so often
@@ -144,6 +145,14 @@ wsServer.on('connection', function(ws, req) {
       sendACK(ws, message);
 
     }, 500)
+
+    // broadcast to all other connected clients
+    var content = message.slice(2); // strip sender's 2-byte message ID
+    wsServer.clients.forEach(function(client) {
+      if (client !== ws && client.readyState === WebSocket.OPEN) {
+        client._curID = send(client, content, client._curID);
+      }
+    });
   });
  
 });
