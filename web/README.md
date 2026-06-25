@@ -3,12 +3,13 @@ This is the web app served up by the Disaster Radio firmware + the simulator web
 
 # Dependencies
 
-This web app is intended to be built using Node.JS version 7.10.1. It is recommended that a tool such as [nvm](https://github.com/nvm-sh/nvm#installing-and-updating) is used to manage your Node and NPM versions.   
-If you have `nvm` installed, you can install and activate the correct version of Node.JS like so,
+This web app uses [Vite](https://vite.dev/) for building. It requires Node.js 22 LTS. It is recommended to use [nvm](https://github.com/nvm-sh/nvm#installing-and-updating) to manage your Node version.
+
+If you have `nvm` installed:
 ```
-nvm install 7.10.1
-nvm use 7.10.1
-```  
+nvm install 22
+nvm use 22
+```
 
 # Setup
 
@@ -19,24 +20,20 @@ cp settings.js.example settings.js
 
 # Building and running
 
-The first time you build you need to do:
-
 ```
-npm run build-css
-```
-
-```
-npm run build # build the js and css
-npm start # run the simulator server
+npm run build  # build the js and css
+npm start      # run the simulator server
 ```
 
-Then in a browser open http://localhost:8000/
+Then open http://localhost:8000/ in a browser.
 
 # Developing
 
 ```
-npm run dev # starts simulator server and auto-builder
+npm run dev
 ```
+
+This starts both the WebSocket simulator (port 8000) and the Vite dev server (port 5173) with hot reload. Open http://localhost:5173/ while developing.
 
 # Websocket
 
