@@ -71,7 +71,7 @@ void LoRaClient::receive(struct Datagram datagram, size_t len)
             server->transmit(this, response, msgLen + DATAGRAM_HEADER);
         }
         else if(memcmp(&datagram.message[0], "lora", 4) == 0){
-            char r_table[256] = {'\0'}; //TODO: need to check size of routing table to allocate correct amount of memory
+            char r_table[2400] = {'\0'}; // up to 40 routes * ~55 chars/route + header
             LL2->getRoutingTable(r_table);
             memcpy(response.destination, BROADCAST, ADDR_LENGTH);
             response.type = 'i';
