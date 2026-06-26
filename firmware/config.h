@@ -31,7 +31,7 @@
 #define LORA_IRQ 26
 #define OLED_SDA 21
 #define OLED_SCL 22
-#define OLED_RST 16
+#define OLED_RST NOT_A_PIN  // GPIO16 conflicts with internal flash on ESP32-PICO-D4
 #define OLED_WIDTH 128
 #define OLED_HEIGHT 64
 #define SD_SCK 14
