@@ -1,5 +1,6 @@
 import '../css/index.scss'
 import { h, render } from 'preact'
+
 import Socket from './socket.js'
 import cipher from './cipher.js'
 import actions from './actions/index.js'
@@ -31,4 +32,4 @@ function init() {
   }
 }
 
-init()
+document.addEventListener('DOMContentLoaded', init)

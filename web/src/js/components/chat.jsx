@@ -66,6 +66,7 @@ export default class Chat extends Component {
           {routes}
         </div>
         <input id="chatInput" type="text" name="msg" placeholder="Enter your name or alias" autofocus />
+        <button type="submit" style="position:absolute;left:-9999px">Send</button>
       </form>
     </div>
   }
