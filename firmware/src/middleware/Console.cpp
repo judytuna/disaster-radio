@@ -41,7 +41,7 @@ void Console::setup()
 
 void Console::usage()
 {
-  printf("Commands: /help /join /nick /raw /lora /get /set /restart\r\n");
+  printf("Commands: /help /nodename /join /nick /raw /lora /get /set /restart\r\n");
 }
 
 // TODO add support for `/get` and `/set` in simulator
@@ -367,6 +367,21 @@ void Console::processLine(char *message, size_t len)
       setUsage();
     }
 
+    else if ((strncmp(&args[0][1], "nodename", 8) == 0) && (args.size() > 1))
+    {
+      strtok(args[1], "\r");
+      strtok(args[1], "\n");
+      username = String(args[1]);
+      saveUsername(username);
+      printf("Node name set to '%s'\r\n", username.c_str());
+    }
+    else if ((strncmp(&args[0][1], "nodename", 8) == 0) && (args.size() == 1))
+    {
+      if (username.length() > 0)
+        printf("Node name is '%s'. Use '/nodename NAME' to change it.\r\n", username.c_str());
+      else
+        printf("No node name set. Use '/nodename NAME' to set one.\r\n");
+    }
     else if (((strncmp(&args[0][1], "join", 4) == 0) || (strncmp(&args[0][1], "nick", 4) == 0)) && (args.size() > 1))
     {
       strtok(args[1], "\r"); // remove CR-LF from username
@@ -390,7 +405,7 @@ void Console::processLine(char *message, size_t len)
       client->receive(response, msgLen - 4 + DATAGRAM_HEADER);
 
       username = String(args[1]);
-      saveUsername(username);
+      // session-only: does not save to NVS
 
     }
     else if (((strncmp(&args[0][1], "join", 4) == 0) || (strncmp(&args[0][1], "nick", 4) == 0)) && (args.size() == 1)){

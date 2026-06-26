@@ -36,36 +36,6 @@ void WebSocketClient::handleData(void *data, size_t len)
     msg_id_buf[2] = '!';
     client->binary(msg_id_buf, 3);
 
-  if (datagram.message[4] == '~')
-  {
-    /// \todo Change WS interface to have name directly
-    /// \todo Change WS interface to use name from startup
-    // Pull out the name from the message
-    int idx = 0;
-    int startIdx = 0;
-    int endIdx = 0;
-    while (datagram.message[idx] != 0x20)
-    {
-      startIdx++;
-      idx++;
-    }
-    idx++;
-    endIdx = idx;
-    while (datagram.message[idx] != 0x20)
-    {
-      endIdx++;
-      idx++;
-    }
-    startIdx++;
-    endIdx--;
-
-    char tempName[endIdx - startIdx + 2] = {0};
-    memcpy(tempName, (char *)&datagram.message[startIdx], endIdx - startIdx + 1);
-    username = String(tempName);
-
-    saveUsername(username);
-  }
-
   /// \todo WS command extensions, this should be changed when WS interface is rewritten!
   // Get first two characters after the <NAME> which are used as commands
   int startIdx = 0;
