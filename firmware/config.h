@@ -22,6 +22,23 @@
 #define OLED_HEIGHT 64
 #endif
 
+#ifdef TTGO_LORA_1V6
+#define LORA_SCK 5
+#define LORA_MISO 19
+#define LORA_MOSI 27
+#define LORA_CS 18
+#define LORA_RST 23
+#define LORA_IRQ 26
+#define OLED_SDA 21
+#define OLED_SCL 22
+#define OLED_RST 16
+#define OLED_WIDTH 128
+#define OLED_HEIGHT 64
+#define SD_SCK 14
+#define SD_MISO 2
+#define SD_MOSI 15
+#endif
+
 #ifdef TTGO_LORA_V2
 #define SD_SCK 14
 #define SD_MISO 2
