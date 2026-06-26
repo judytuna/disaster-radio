@@ -1,19 +1,23 @@
 import { defineConfig } from 'vite'
-import { rename } from 'fs/promises'
+import { rename, readFile, writeFile } from 'fs/promises'
 import { resolve } from 'path'
 
-// Rename index.html -> index.htm after build for ESP32 firmware compatibility
-const renameIndexPlugin = {
-  name: 'rename-index',
+// Rename index.html -> index.htm and fix script tag for ESP32 compatibility.
+// The IIFE output format is a classic script but Vite still injects type="module",
+// which breaks captive portal browsers. Strip it and the crossorigin attribute.
+const espCompatPlugin = {
+  name: 'esp-compat',
   closeBundle: async () => {
-    const from = resolve(__dirname, 'static/index.html')
-    const to = resolve(__dirname, 'static/index.htm')
-    await rename(from, to)
+    const htmlPath = resolve(__dirname, 'static/index.html')
+    let html = await readFile(htmlPath, 'utf8')
+    html = html.replace(/ type="module"/g, '').replace(/ crossorigin/g, '')
+    await writeFile(htmlPath, html)
+    await rename(htmlPath, resolve(__dirname, 'static/index.htm'))
   }
 }
 
 export default defineConfig({
-  plugins: [renameIndexPlugin],
+  plugins: [espCompatPlugin],
   esbuild: {
     jsxFactory: 'h',
     jsxFragment: 'Fragment',
@@ -21,8 +25,10 @@ export default defineConfig({
   build: {
     outDir: 'static',
     emptyOutDir: false,
+    target: 'es2015',
     rollupOptions: {
       output: {
+        format: 'iife',
         entryFileNames: 'build/bundle.js',
         assetFileNames: 'build/[name][extname]',
         chunkFileNames: 'build/[name].js',
