@@ -9,7 +9,7 @@ import Chat from './components/chat.jsx'
 function renderAll() {
   var container = document.getElementById('container')
   var replace = container.children.length ? container.children[0] : undefined
-  render(<Chat state />, container, replace)
+  render(<Chat state="chat" />, container, replace)
 }
 
 function init() {

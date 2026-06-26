@@ -43,6 +43,10 @@ export default class Chat extends Component {
     })
   }
 
+  handleKey(e) {
+    if(e.keyCode === 13) this.send(e)
+  }
+
   componentDidUpdate() {
     this.scrollBottom()
   }
@@ -65,8 +69,8 @@ export default class Chat extends Component {
           <div class="routes-header">{routes.length} {routes.length === 1 ? 'node' : 'nodes'} nearby</div>
           {routes}
         </div>
-        <input id="chatInput" type="text" name="msg" placeholder="Enter your name or alias" autofocus />
-        <button type="submit" style="position:absolute;left:-9999px">Send</button>
+        <input id="chatInput" type="text" name="msg" placeholder="Enter your name or alias" autofocus onkeydown={this.handleKey} />
+        <button type="submit">Send</button>
       </form>
     </div>
   }
