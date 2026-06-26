@@ -57,11 +57,19 @@ Alternatively, you could write another Layer3 client for as part of the disater 
 npm test
 ```
 
-This runs all tests once and exits — good for CI. To run in watch mode while developing:
+This runs the unit and integration tests once and exits — good for CI. To run in watch mode while developing:
 
 ```
 npm run test:watch
 ```
+
+To run the end-to-end tests:
+
+```
+npm run test:e2e
+```
+
+This automatically starts the WebSocket simulator and the Vite dev server, runs 12 browser tests with Playwright, then shuts them down. You do not need to start the dev server yourself first — if it's already running on port 5173, Playwright will reuse it (but the simulator on port 8000 must also be running in that case, or let Playwright start everything fresh).
 
 Tests run automatically on GitHub Actions whenever files under `web/` change.
 
@@ -78,7 +86,20 @@ These are the kinds of bugs that only show up on the real device, not in local d
 
 ## What the tests cover
 
-### `route_message.test.js` — pure functions
+### `src/test/e2e/chat.spec.js` — end-to-end browser tests (Playwright)
+
+Tests the full experience in a real Chromium browser against the dev server simulator. This is the tier that catches bugs that only appear in the browser — DOM timing issues, CSS injection, form submission on mobile, and anything that requires the WebSocket to be live.
+
+Covers:
+- Page loads with correct title and dark background (CSS injected by bundle.js)
+- Chat input and Send button are visible
+- WebSocket connects and incoming messages from the simulator appear
+- Joining: enter a name and press Enter or click Send → status message appears, input clears
+- Chatting: send a message → appears as "self" with username, input clears
+- Whitespace-only message shows an error placeholder without sending
+- Route table: node count and MAC/signal bars render after simulator broadcasts a route table
+
+### `src/test/route_message.test.js` — pure functions
 
 `signalBars(metricHex)` and `formatMac(mac)` are pure functions with no side effects. Tests verify the signal strength thresholds (0x40/0x80/0xc0 boundaries) and that MAC addresses are formatted with colons. If the thresholds or formatting ever drift, these fail immediately.
 
