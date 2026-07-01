@@ -21,6 +21,17 @@ Debugging can be done over serial using a tty interface, such as screen or minic
 To test the web app:  
 * connect to the SSID provided by the device, `disaster.radio <MAC address>` 
 * navigate to http://disaster.local or http://192.168.4.1
-* enter a nick
+* type a nickname and press send (or enter) to join the chat
 * send a message
 * to toggle the local echo, type `$`
+
+## Serial console commands
+
+When connected via serial or telnet, the following commands are available:
+
+* `/nodename NAME` — set a persistent name for this node, saved to flash (NVS). This name appears in the web UI welcome message so users know which node they're connected to. Not the same as a chat nickname.
+* `/join NICKNAME` or `/nick NICKNAME` — set your chat nickname for this serial session only. Does not save to flash.
+* `/lora` — print LoRa config and current routing table.
+* `/get` / `/set` — get or set device configuration options.
+* `/restart` — reboot the device.
+* `/help` — list all commands.

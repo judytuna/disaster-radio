@@ -165,6 +165,14 @@ Type '/join NICKNAME' to join the chat, or '/help' for more commands.
 < > 
 ```
 
+Available serial console commands:
+- `/nodename NAME` — set a persistent name for this node, saved to flash and shown in the web UI welcome message. Use this to identify which node someone is connected to.
+- `/join NICKNAME` or `/nick NICKNAME` — set your chat nickname for this serial session only (not saved to flash).
+- `/lora` — print LoRa config and routing table.
+- `/get` / `/set` — get or set device configuration options.
+- `/restart` — reboot the device.
+- `/help` — list all commands.
+
 See [firmware/README.md](https://github.com/sudomesh/disaster-radio/tree/master/firmware) for more debugging information.
 
 # Adding Libraries
