@@ -1,4 +1,4 @@
-import { findTriggers } from './keywords.js'
+import { findTriggers, findSpeechCommand } from './keywords.js'
 
 // Fun alerts come out the left channel, emergency alerts out the right.
 // A terminal's headphone jack feeds a physical mixer/soundsystem, where
@@ -155,9 +155,26 @@ function playTrigger(audioCtx, trigger) {
   synth(audioCtx, dest)
 }
 
-// Scans a chat message for trigger words and plays the matching alert(s).
-// No-ops silently if Web Audio isn't available (e.g. in tests).
+// Speaks text aloud via the browser's built-in TTS. Note: the Web Speech
+// API doesn't expose an audio node, so this can't be routed through the
+// fun/emergency StereoPannerNodes above — it just plays on the browser's
+// normal (centered) audio output, same as the sound effects' physical
+// output device, but not hard-panned to one channel.
+function speak(text) {
+  if (typeof window === 'undefined' || !window.speechSynthesis) return
+  window.speechSynthesis.speak(new SpeechSynthesisUtterance(text))
+}
+
+// Scans a chat message for trigger words and plays the matching alert(s),
+// or speaks it aloud if it starts with a !speak/!fun/!emergency/!yell command.
+// No-ops silently if Web Audio/Speech isn't available (e.g. in tests).
 function handleMessage(text) {
+  var speechCommand = findSpeechCommand(text)
+  if (speechCommand) {
+    speak(speechCommand.text)
+    return
+  }
+
   var audioCtx = getContext()
   if (!audioCtx) return
 

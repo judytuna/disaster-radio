@@ -61,6 +61,16 @@ Trigger words only match when hashtagged, case-insensitively (so `#fire` trigger
 
 Sounds are currently synthesized with the Web Audio API — see `src/js/soundboard.js` — so no audio files are required. To use real sound files instead, replace the relevant synth function's body with buffer playback into the same destination node. The word list lives in `src/js/keywords.js`.
 
+## Speaking messages aloud
+
+A message that *starts* with one of these commands is read aloud with the browser's text-to-speech instead of playing a sound effect — the rest of the message after the command is what gets spoken:
+* Fun: `!speak the message here` or `!fun the message here`
+* Emergency: `!emergency the message here` or `!yell the message here`
+
+For example, `!yell everyone please move to the east field` speaks "everyone please move to the east field". The command must be the very first thing in the message (case-insensitively) — it doesn't trigger if it shows up later in the text.
+
+This relies on the browser's built-in [SpeechSynthesis API](https://developer.mozilla.org/en-US/docs/Web/API/SpeechSynthesis) (works offline in Firefox on Linux via `espeak-ng`). Note that unlike the sound effects above, spoken audio is **not** panned to the fun/emergency channel — the Web Speech API doesn't expose an audio node that can be routed through our `StereoPannerNode`s, so it just plays on the browser's normal (centered) output.
+
 # Testing
 
 ```
